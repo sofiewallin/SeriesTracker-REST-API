@@ -1,0 +1,32 @@
+{
+  "name": "series-tracker-rest-api",
+  "version": "1.0.0",
+  "private": true,
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sofiewallin/SeriesTracker-REST-API.git"
+  },
+  "keywords": [],
+  "author": "Sofie Wallin",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sofiewallin/SeriesTracker-REST-API/issues"
+  },
+  "homepage": "https://github.com/sofiewallin/SeriesTracker-REST-API#readme",
+  "dependencies": {
+    "dotenv": "^10.0.0",
+    "express": "^4.17.2",
+    "mongoose": "^6.1.4"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  },
+  "engines": {
+    "node": "14.18.2"
+  }
+}
