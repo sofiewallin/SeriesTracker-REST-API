@@ -35,6 +35,10 @@ app.all('/api/*', function(req, res, next) {
 const usersRouter = require('./routes/users');
 app.use('/api/users', usersRouter);
 
+app.get('/', (req, res) => {
+	res.send('Hello world');
+});
+
 
 /* 3. Listen to port and start server */
 const port = process.env.PORT || 3000; 
