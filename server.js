@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * Server file.
  * 
@@ -8,10 +6,13 @@
 
 const express = require('express');
 const app = express();
+
 const dotenv = require('dotenv');
+dotenv.config();
+
 const mongoose = require('mongoose');
 
-dotenv.config();
+app.use(express.json());
 
 /* 1. Connect to database */
 
@@ -29,18 +30,18 @@ app.all('/api/*', function(req, res, next) {
 	next();
 });
 
-/* 2. Set API routes */
+/* 3. Set API routes */
 
 // Users routes
 const usersRouter = require('./routes/users');
 app.use('/api/users', usersRouter);
 
-app.get('/', (req, res) => {
-	res.send('Hello world');
-});
+// Series routes
+const seriesRouter = require('./routes/series');
+app.use('/api/series', seriesRouter);
 
 
-/* 3. Listen to port and start server */
+/* 4. Listen to port and start server */
 const port = process.env.PORT || 3000; 
 
 app.listen(port, () => console.log(`Server started. Listening on port ${port}...`));
