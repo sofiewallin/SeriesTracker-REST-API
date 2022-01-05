@@ -1,18 +1,24 @@
 /**
- * Server file.
+ * Server.
+ * 
+ * 1. Connect to database
+ * 2. Set API headers
+ * 3. Set API routes
+ * 4. Listen to port and start server
  * 
  * @author: Sofie Wallin
  */
 
+// dotenv - for enabling use of .env
+require('dotenv').config();
+
+// Express
 const express = require('express');
 const app = express();
-
-const dotenv = require('dotenv');
-dotenv.config();
-
-const mongoose = require('mongoose');
-
 app.use(express.json());
+
+// Mongoose
+const mongoose = require('mongoose');
 
 /* 1. Connect to database */
 
@@ -32,16 +38,23 @@ app.all('/api/*', function(req, res, next) {
 
 /* 3. Set API routes */
 
-// Users routes
-const usersRouter = require('./routes/users');
-app.use('/api/users', usersRouter);
+// Middleware to authenticate route
+const authenticate = require('./middleware/authenticateUser');
 
-// Series routes
+// Routes for authentication
+const  authenticationRouter = require('./routes/authentication');
+app.use('/', authenticationRouter);
+
+// Routes for series
 const seriesRouter = require('./routes/series');
-app.use('/api/series', seriesRouter);
+app.use('/series', authenticate, seriesRouter);
+
+// Routes for users
+/*const usersRouter = require('./routes/users');
+app.use('/users', authenticate, usersRouter);*/
 
 
 /* 4. Listen to port and start server */
-const port = process.env.PORT || 3000; 
 
+const port = process.env.PORT || 3000; 
 app.listen(port, () => console.log(`Server started. Listening on port ${port}...`));

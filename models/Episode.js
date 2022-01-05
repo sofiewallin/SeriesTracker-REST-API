@@ -1,14 +1,17 @@
-const mongoose = require('mongoose');
-
 /**
- * Defines a mongoose schema for a episode. 
- * Defines a mongoose schema for a series. 
- * Creates a mongoose model for a series and exports it.
+ * Episode model.
+ * 
+ * 1. Set episode schema
+ * 2. Export episode model
  * 
  * @author: Sofie Wallin
  */
 
-// Episode schema
+// Mongoose
+const mongoose = require('mongoose');
+
+/* 1. Set episode schema */
+
 const episodeSchema = new mongoose.Schema(
     {
         seasonNumber: {
@@ -31,5 +34,6 @@ const episodeSchema = new mongoose.Schema(
     { timestamps: true }
 );
 
-// Episode model
+/* 2. Export episode model */
+
 module.exports = mongoose.model('Episode', episodeSchema);
