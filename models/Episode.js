@@ -10,7 +10,9 @@
 // Mongoose
 const mongoose = require('mongoose');
 
-/* 1. Set episode schema */
+/**
+ * 1. Set episode schema
+ */
 
 const episodeSchema = new mongoose.Schema(
     {
@@ -34,6 +36,8 @@ const episodeSchema = new mongoose.Schema(
     { timestamps: true }
 );
 
-/* 2. Export episode model */
+/**
+ * 2. Export episode model
+ */
 
 module.exports = mongoose.model('Episode', episodeSchema);

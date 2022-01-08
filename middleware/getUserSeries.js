@@ -1,23 +1,20 @@
 /**
- * Get series middleware - Gets an series from database by id.
+ * Get series added to a user middleware - Gets a series from database by id.
  * 
  * @author: Sofie Wallin
  */
 
-// Models
-const Series = require('../models/Series');
-
-module.exports = async function getSeries(req, res, next) {
+ module.exports = async function getUserSeries(req, res, next) {
     let series;
 
     // Get id from parameter
-    const seriesId = req.params.id;
+    const seriesId = req.params.series_id;
 
     try {
-        // Get series by id
-        series = await Series.findById(seriesId);
+        // Get episode by id
+        series = await res.user.series.id(seriesId);
 
-        // Send error if there is no series matching the id
+        // Send error if there is no episode matching the id
         if (series == null) return res.status(404).json({ message: `There is no series with id: ${seriesId}.` });
     } catch (err) {
         // Send error

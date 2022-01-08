@@ -15,7 +15,9 @@ const mongoose = require('mongoose');
 const Series = require('./Series');
 const Episode = require('./Episode');
 
-/* 1. Set user series schema */
+/**
+ * 1. Set user series schema
+ */
 
 const userSeriesSchema = new mongoose.Schema(
     {
@@ -41,7 +43,9 @@ const userSeriesSchema = new mongoose.Schema(
     { timestamps: { createdAt: 'addedAt' } }
 );
 
-/* 2. Set user schema */
+/**
+ * 2. Set user schema
+ */
 
 const userSchema = new mongoose.Schema(
     {
@@ -62,6 +66,8 @@ const userSchema = new mongoose.Schema(
     { timestamps: true }
 );
 
-/* 3. Export user model */
+/**
+ * 3. Export user model
+ */
 
 module.exports = mongoose.model('User', userSchema);
