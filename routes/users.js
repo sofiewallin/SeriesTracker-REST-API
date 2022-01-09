@@ -93,13 +93,15 @@ router.get('/:id/next-episode-list', authorizeAndGetUser, async (req, res) => {
     // Get next episode from all series added to user
     if (userSeries.length !== 0) {
         for (let i = 0; i < userSeries.length; i++) {
-            const nextEpisode = { 
-                series: userSeries[i].series_id,
-                nextEpisode: userSeries[i].nextEpisode 
-            };
-
-            // Add next episode to next episode list
-            nextEpisodeList.push(nextEpisode);
+            if (userSeries[i].watchingStatus === 'Watching now') {
+                const nextEpisode = { 
+                    series: userSeries[i].series_id,
+                    nextEpisode: userSeries[i].nextEpisode 
+                };
+    
+                // Add next episode to next episode list
+                nextEpisodeList.push(nextEpisode);
+            }
         }
     }
 
