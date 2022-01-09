@@ -1,5 +1,8 @@
 /**
- * Get series middleware - Gets an series from database by id.
+ * Get series middleware.
+ * 
+ * Gets a series from database by id and sets it as
+ * res.series for routes.
  * 
  * @author: Sofie Wallin
  */
@@ -14,16 +17,17 @@ module.exports = async function getSeries(req, res, next) {
     const seriesId = req.params.id;
 
     try {
-        // Get series by id
+        // Get series from database by id
         series = await Series.findById(seriesId);
 
-        // Send error if there is no series matching the id
+        // Check if there is a match on the id in the database
         if (series == null) return res.status(404).json({ message: `There is no series with id: ${seriesId}.` });
     } catch (err) {
-        // Send error
         return res.status(500).json({ message: err.message });
     }
 
+    // Set series response
     res.series = series;
+
     next();
 }

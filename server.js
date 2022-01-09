@@ -36,7 +36,7 @@ db.once('open', () => console.log('Connected to database'));
 app.all('/api/*', function(req, res, next) {
 	res.header("Access-Control-Allow-Origin", "*");
 	res.header("Access-Control-Allow-Headers", "X-Requested-With");
-	res.header("Access-Control-Allow-Methods", "GET,PUT,PATCH,POST,DELETE");
+	res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE");
 	next();
 });
 
@@ -45,7 +45,7 @@ app.all('/api/*', function(req, res, next) {
  */
 
 // Middleware to authenticate user for route
-const authenticateUser = require('./middleware/authenticateUser');
+const verifyToken = require('./middleware/verifyToken');
 
 // Routes for authentication
 const  authenticationRouter = require('./routes/authentication');
@@ -53,11 +53,11 @@ app.use('/', authenticationRouter);
 
 // Routes for series
 const seriesRouter = require('./routes/series');
-app.use('/series', authenticateUser, seriesRouter);
+app.use('/series', verifyToken, seriesRouter);
 
 // Routes for users
 const usersRouter = require('./routes/users');
-app.use('/users/', authenticateUser, usersRouter);
+app.use('/users/', verifyToken, usersRouter);
 
 
 /**

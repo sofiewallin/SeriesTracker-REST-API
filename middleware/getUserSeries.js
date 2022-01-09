@@ -5,19 +5,19 @@
  */
 
  module.exports = async function getUserSeries(req, res, next) {
+    const user = res.user;
     let series;
 
     // Get id from parameter
     const seriesId = req.params.series_id;
 
     try {
-        // Get episode by id
-        series = await res.user.series.id(seriesId);
+        // Get episode from database by id
+        series = await user.series.id(seriesId);
 
-        // Send error if there is no episode matching the id
-        if (series == null) return res.status(404).json({ message: `There is no series with id: ${seriesId}.` });
+        // Check if there is a match on the id in the database
+        if (series == null) return res.status(404).json({ message: `There is no series added with id: ${seriesId}.` });
     } catch (err) {
-        // Send error
         return res.status(500).json({ message: err.message });
     }
 

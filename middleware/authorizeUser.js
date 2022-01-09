@@ -13,5 +13,6 @@ const jwt = require('jsonwebtoken');
 module.exports = function authorizeUser(req, res, next) {
     const loggedInUser = req.user;
     if (loggedInUser.userId !== req.params.id) return res.sendStatus(401);
+    
     next();
 }

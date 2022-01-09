@@ -13,15 +13,14 @@ module.exports = async function getUser(req, res, next) {
     // Get id from parameter
     const userId = req.params.id;
     try {
-        // Get user by id
+        // Get user from database by id
         user = await User.findById(userId);
 
-        // Send error if there is no users matching the id
+        // Check if there is a match on the id in the database
         if (user == null) {
             return res.status(404).json({ message: `There is no user with id: ${userId}.` });
         }
     } catch (err) {
-        // Send error
         return res.status(500).json({ message: err.message });
     }
 
