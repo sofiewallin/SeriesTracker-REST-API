@@ -156,6 +156,38 @@ router.get('/:id', getSeries, async (req, res) => {
     res.json(series);
 });
 
+/* 2.4 Get one episode */
+
+router.get('/:id/get-episode/:episode_id', getSeriesAndEpisode, async (req, res) => {
+    const series = res.series;
+    let episode = res.episode;
+
+    let originalAirDate = episode.originalAirDate;
+
+    const month = originalAirDate.toLocaleString('default', { month: 'short' });
+    const year = originalAirDate.getFullYear();
+    const date = originalAirDate.getDate();
+
+    originalAirDate = `${date} ${month}. ${year}`;
+
+    let seasonNumber = episode.seasonNumber;
+    if (seasonNumber < 10) seasonNumber = seasonNumber.toString().padStart(2, '0');
+    let episodeNumber = episode.episodeNumber;
+    if (episodeNumber < 10) episodeNumber = episodeNumber.toString().padStart(2, '0');
+
+    const episodeNumbers = `S${seasonNumber}E${episodeNumber}`;
+
+    episode = {
+        episodeId: episode._id,
+        episodeNumbers: episodeNumbers,
+        name: episode.name,
+        originalAirDate: originalAirDate,
+        series: series.name
+    }
+    
+    res.json(episode);
+});
+
 /**
  * 3. Set update routes
  */
