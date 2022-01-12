@@ -359,7 +359,25 @@ router.put('/:id/series/:series_id/unwatch-episode/:episode_id', authorizeAndGet
     }
 });
 
-/* 2.5 Change watching status of one series added to a user */
+/* 2.5 Clear watch history of one series added to a user */
+router.put('/:id/series/:series_id/clear-watch-history', authorizeAndGetUserAndSeries, async (req, res) => {
+    const user = res.user;
+    const series = res.series;
+
+    series.watchedEpisodes = [];
+
+    try {
+        // Save updated user
+        await user.save();
+
+        // Send updated series
+        res.json(series);
+    } catch (err) {
+        res.status(400).json({ message: err.message });
+    }
+});
+
+/* 2.6 Change watching status of one series added to a user */
 
 router.put('/:id/series/:series_id/change-watching-status/:status', authorizeAndGetUserAndSeries, async (req, res) => {
     const user = res.user;
