@@ -359,19 +359,42 @@ router.put('/:id/series/:series_id/unwatch-episode/:episode_id', authorizeAndGet
     }
 });
 
-/* 2.5 Clear watch history of one series added to a user */
+/* 2.5 Clear watch history and set next episode to first episode of one series added to a user */
 router.put('/:id/series/:series_id/clear-watch-history', authorizeAndGetUserAndSeries, async (req, res) => {
     const user = res.user;
-    const series = res.series;
+    const userSeries = res.series;
 
-    series.watchedEpisodes = [];
+    // Clear watch history
+    userSeries.watchedEpisodes = [];
+
+    // Get series from database
+    let series;
+    const seriesId = userSeries.series_id;
+
+    try {
+        // Get series from database by id
+        series = await Series.findById(seriesId);
+
+        // Check if there is a match on the id in the database
+        if (series == null) return res.status(404).json({ message: `There is no series with id: ${seriesId}.` });
+    } catch (err) {
+        return res.status(500).json({ message: err.message });
+    }
+
+    // Set next episode
+    const episodes = series.episodes;
+    let nextEpisode = null;
+
+    if (episodes.length !== 0) nextEpisode = episodes[0];
+    
+    userSeries.nextEpisode = nextEpisode;
 
     try {
         // Save updated user
         await user.save();
 
         // Send updated series
-        res.json(series);
+        res.json(userSeries);
     } catch (err) {
         res.status(400).json({ message: err.message });
     }
