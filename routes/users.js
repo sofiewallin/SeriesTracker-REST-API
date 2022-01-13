@@ -167,12 +167,8 @@ router.put('/:id/add-series', authorizeAndGetUser, async (req, res) => {
         // Save updated user
         await user.save();
 
-        // Get added series
-        const newUserSeriesIndex = userSeries.length - 1;
-        newUserSeries = userSeries[newUserSeriesIndex];
-
         // Send updated user series
-        res.json(newUserSeries);
+        res.json(userSeries);
     } catch (err) {
         // Send error
         res.status(400).json({ message: err.message });
@@ -183,17 +179,18 @@ router.put('/:id/add-series', authorizeAndGetUser, async (req, res) => {
 
 router.put('/:id/remove-series/:series_id', authorizeAndGetUserAndSeries, async (req, res) => {
     const user = res.user;
+    const userSeries = user.series;
     const series = res.series;
 
     // Remove series from users series list
-    user.series.pull(series);
+    userSeries.pull(series);
 
     try {
         // Save updated user
         await user.save();
 
         // Send removed series
-        res.json(series);
+        res.json(userSeries);
     } catch (err) {
         // Send error
         res.status(500).json({ message: err.message });
