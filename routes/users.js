@@ -72,7 +72,7 @@ router.patch('/:id/add-series', authorizeAndGetUser, async (req, res) => {
     }
 
     // Check if user has already added the series
-    const matchingSeries = userSeriesList.filter((userSeries) => userSeries.series_id.toString() === seriesId);
+    const matchingSeries = userSeriesList.filter(userSeries => userSeries.series_id.toString() === seriesId);
     if (matchingSeries.length > 0) { 
         return res.status(400).json({ message: `The series with id ${seriesId} has already been added.` });
     }
@@ -100,8 +100,10 @@ router.patch('/:id/add-series', authorizeAndGetUser, async (req, res) => {
         // Save updated user
         await user.save();
 
+        newUserSeries = userSeriesList.find(userSeries => userSeries.series_id.toString() === seriesId);
+
         // Send updated user series
-        res.json(userSeriesList);
+        res.json(newUserSeries);
     } catch (err) {
         // Send error
         res.status(400).json({ message: err.message });
@@ -123,7 +125,7 @@ router.patch('/:id/remove-series/:series_id', authorizeAndGetUserAndSeries, asyn
         await user.save();
 
         // Send removed series
-        res.json(userSeriesList);
+        res.json(userSeries);
     } catch (err) {
         // Send error
         res.status(500).json({ message: err.message });
