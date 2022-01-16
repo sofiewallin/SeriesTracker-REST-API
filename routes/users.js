@@ -72,7 +72,7 @@ router.patch('/:id/add-series', authorizeAndGetUser, async (req, res) => {
     }
 
     // Check if user has already added the series
-    const matchingSeries = userSeriesList.filter((series) => series.series_id.toString() === seriesId);
+    const matchingSeries = userSeriesList.filter((userSeries) => userSeries.series_id.toString() === seriesId);
     if (matchingSeries.length > 0) { 
         return res.status(400).json({ message: `The series with id ${seriesId} has already been added.` });
     }
@@ -94,7 +94,7 @@ router.patch('/:id/add-series', authorizeAndGetUser, async (req, res) => {
     };
 
     // Push the series to user
-    userSeries.push(newUserSeries);
+    userSeriesList.push(newUserSeries);
 
     try {
         // Save updated user
