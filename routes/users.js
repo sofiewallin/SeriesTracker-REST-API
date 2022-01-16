@@ -26,99 +26,36 @@ let authorizeAndGetUserAndSeries = [authorizeUser, getUser, getUserSeries];
  * 1. Set read routes
  */
 
-/* 1.1 Get all added series to a user */
+/* 1.1 Get series list */
 
 router.get('/:id/series', authorizeAndGetUser, async (req, res) => {
         const user = res.user;
+        const userSeriesList = user.series;
+
 
         // Send all series
-        res.json(user.series);
+        res.json(userSeriesList);
 
 });
 
-/* 1.2 Get added series to a user based on watching status */
-
-router.get('/:id/series/watching-status/:status', authorizeAndGetUser, async (req, res) => {
-    const user = res.user;
-
-    let seriesBasedOnWatchingStatus = [];
-    let watchingStatus = req.params.status;
-
-    // Turn the watching status parameter into a string to check against
-    switch (watchingStatus) {
-        case 'watching-now':
-            watchingStatus = "Watching now";
-            break;
-        case 'watch-next':
-            watchingStatus = "Watch next";
-            break;
-        case 'have-watched':
-            watchingStatus = "Have watched";
-            break;
-        default:
-            return res.status(400).json({ message: `${watchingStatus} is not a valid watching status` });
-    }
-
-    // Push all the series with matching watching status into array
-    const userSeries = user.series;
-
-    for (let i = 0; i < userSeries.length; i++) {
-        const series = userSeries[i];
-        if (series.watchingStatus === watchingStatus) {
-            seriesBasedOnWatchingStatus.push(series);
-        }
-    }
-
-    // Send series
-    res.json(seriesBasedOnWatchingStatus);
-});
-
-/* 1.3 Get one series added to a user */
+/* 1.2 Get one series */
 
 router.get('/:id/series/:series_id', authorizeAndGetUserAndSeries, async (req, res) => {
-    const series = res.series;
+    const userSeries = res.series;
 
     // Send series
-    res.send(series);
-});
-
-/* 1.4 Get all next episodes for a user */
-
-router.get('/:id/next-episode-list', authorizeAndGetUser, async (req, res) => {
-    const user = res.user;
-    const userSeries = user.series;
-
-    let nextEpisodeList = [];
-
-    // Get next episode from all series added to user
-    if (userSeries.length !== 0) {
-        for (let i = 0; i < userSeries.length; i++) {
-            if (userSeries[i].watchingStatus === 'Watching now') {
-                const nextEpisode = { 
-                    series: userSeries[i].series_id,
-                    nextEpisode: userSeries[i].nextEpisode 
-                };
-    
-                // Add next episode to next episode list
-                nextEpisodeList.push(nextEpisode);
-            }
-        }
-    }
-
-    // Send next episode list
-    res.json(nextEpisodeList);
- 
+    res.send(userSeries);
 });
 
 /**
  * 2. Set update routes
  */
 
-/* 2.1 Add series to a user */
+/* 2.1 Add one series to series list */
 
-router.put('/:id/add-series', authorizeAndGetUser, async (req, res) => {
+router.patch('/:id/add-series', authorizeAndGetUser, async (req, res) => {
     const user = res.user;
-    const userSeries = user.series;
+    const userSeriesList = user.series;
 
     // Check if there is a series with the given id
     let series;
@@ -135,13 +72,9 @@ router.put('/:id/add-series', authorizeAndGetUser, async (req, res) => {
     }
 
     // Check if user has already added the series
-    if (userSeries.length !== 0) {
-        for (let i = 0; i < userSeries.length; i++) {
-            const exisitingSeriesId = userSeries[i].series_id.toString();
-            if (seriesId === exisitingSeriesId) {
-                return res.status(400).json({ message: `The series with id ${seriesId} has already been added.` });
-            }
-        }
+    const matchingSeries = userSeriesList.filter((series) => series.series_id.toString() === seriesId);
+    if (matchingSeries.length > 0) { 
+        return res.status(400).json({ message: `The series with id ${seriesId} has already been added.` });
     }
 
     // Set next episode to the first episode if the series has episodes
@@ -168,39 +101,38 @@ router.put('/:id/add-series', authorizeAndGetUser, async (req, res) => {
         await user.save();
 
         // Send updated user series
-        res.json(userSeries);
+        res.json(userSeriesList);
     } catch (err) {
         // Send error
         res.status(400).json({ message: err.message });
     }
 });
 
-/* 2.2 Remove series from a user */
+/* 2.2 Remove one series from series list */
 
-router.put('/:id/remove-series/:series_id', authorizeAndGetUserAndSeries, async (req, res) => {
+router.patch('/:id/remove-series/:series_id', authorizeAndGetUserAndSeries, async (req, res) => {
     const user = res.user;
-    const userSeries = user.series;
-    const series = res.series;
+    const userSeriesList = user.series;
+    const userSeries = res.series;
 
     // Remove series from users series list
-    userSeries.pull(series);
+    userSeriesList.pull(userSeries);
 
     try {
         // Save updated user
         await user.save();
 
         // Send removed series
-        res.json(userSeries);
+        res.json(userSeriesList);
     } catch (err) {
         // Send error
         res.status(500).json({ message: err.message });
     }
 });
 
-/* 2.3 Add episode to "watched episodes" and set next episode for one series added to a user */
+/* 2.3 Add episode to "watched episodes" and set next episode for one series */
 
 router.put('/:id/series/:series_id/watch-episode/:episode_id', authorizeAndGetUserAndSeries, async (req, res) => {
-    const user = res.user;
     const userSeries = res.series;
 
     // Check if there is a series in the database with the given id
@@ -235,15 +167,10 @@ router.put('/:id/series/:series_id/watch-episode/:episode_id', authorizeAndGetUs
 
     // Check if the episode has already been added to watched episodes
     const watchedEpisodes = userSeries.watchedEpisodes;
-    
-    if ( watchedEpisodes.length !== 0) {
-        for (let i = 0; i < watchedEpisodes.length; i++) {
-            const existingEpisodeId = watchedEpisodes[i];
 
-            if (episodeId === existingEpisodeId) {
-                return res.status(400).json({ message: `The episode id ${episodeId} has already been added to watched episodes.` });
-            }
-        }
+    const matchingEpisode = watchedEpisodes.filter((episode) => episode === episodeId);
+    if (matchingEpisode.length > 0) { 
+        return res.status(400).json({ message: `The episode id ${episodeId} has already been added to watched episodes.` });
     }
 
     // Add episode to watched episodes
@@ -251,33 +178,28 @@ router.put('/:id/series/:series_id/watch-episode/:episode_id', authorizeAndGetUs
 
     // Set next episode
     let nextEpisode = null;
-    let episodeIdStrings = [];
 
-    for (let i = 0; i < episodes.length; i++) {
-        const episodeIdString = episodes[i]._id.toString();
-        episodeIdStrings.push(episodeIdString);
-    }
+    const episodeIdStrings = episodes.map(episode => episode._id.toString());
 
     const nextEpisodeList = episodeIdStrings.filter(episodeIdString => !watchedEpisodes.includes(episodeIdString));
-    if (nextEpisodeList.length !== 0) nextEpisode = nextEpisodeList[0];
+    if (nextEpisodeList.length > 0) nextEpisode = nextEpisodeList[0];
      
     userSeries.nextEpisode = nextEpisode;
 
     try {
         // Save updated user
-        await user.save();
+        await userSeries.save();
 
         // Send added episode id
-        res.json({ episodeId: episodeId });
+        res.json(userSeries);
     } catch (err) {
         res.status(400).json({ message: err.message });
     }
 });
 
-/* 2.4 Remove episode from "watched episodes" and set next episode for one series added to a user */
+/* 2.4 Remove episode from "watched episodes" and set next episode for one series */
 
 router.put('/:id/series/:series_id/unwatch-episode/:episode_id', authorizeAndGetUserAndSeries, async (req, res) => {
-    const user = res.user;
     const userSeries = res.series;
 
     // Check if there is a series in the database with the given id
@@ -313,33 +235,20 @@ router.put('/:id/series/:series_id/unwatch-episode/:episode_id', authorizeAndGet
     // Check if there is a match for the episode in watched episodes and remove it
     const watchedEpisodes = userSeries.watchedEpisodes;
 
-    let episodeMatch = false;
-    for (let i = 0; i < watchedEpisodes.length; i++) {
-        const existingEpisodeId = watchedEpisodes[i];
-
-        if (episodeId === existingEpisodeId) {
-            episodeMatch = true;
-            episodeId = existingEpisodeId;
-        }
-    }
-
-    if (episodeMatch) {
+    const matchingEpisode = watchedEpisodes.filter((episode) => episode === episodeId);
+    if (matchingEpisode.length > 0) { 
         watchedEpisodes.pull(episodeId);
     } else {
         return res.status(400).json({ message: `The episode id ${episodeId} doesn't exist in watched episodes.` });
     }
 
     // Set next episode
-    if (watchedEpisodes.length !== 0) {
-        let episodeIdStrings = [];
-
-        for (let i = 0; i < episodes.length; i++) {
-            const episodeIdString = episodes[i]._id.toString();
-            episodeIdStrings.push(episodeIdString);
-        }
+    if (watchedEpisodes.length > 0) {
+        const episodeIdStrings = episodes.map(episode => episode._id.toString());
 
         const nextEpisodeList = episodeIdStrings.filter(episodeIdString => !watchedEpisodes.includes(episodeIdString));
         const nextEpisode = nextEpisodeList[0];
+        
         userSeries.nextEpisode = nextEpisode;
     } else {
         userSeries.nextEpisode = episodes[0];
@@ -347,18 +256,17 @@ router.put('/:id/series/:series_id/unwatch-episode/:episode_id', authorizeAndGet
 
     try {
         // Save updated user
-        await user.save();
+        await userSeries.save();
 
         // Send removed episode id
-        res.json({ episodeId: episodeId });
+        res.json(userSeries);
     } catch (err) {
         res.status(400).json({ message: err.message });
     }
 });
 
-/* 2.5 Clear watch history and set next episode to first episode of one series added to a user */
-router.put('/:id/series/:series_id/clear-watch-history', authorizeAndGetUserAndSeries, async (req, res) => {
-    const user = res.user;
+/* 2.5 Clear watch history and set next episode to first episode of one series */
+router.patch('/:id/series/:series_id/clear-watch-history', authorizeAndGetUserAndSeries, async (req, res) => {
     const userSeries = res.series;
 
     // Clear watch history
@@ -380,15 +288,15 @@ router.put('/:id/series/:series_id/clear-watch-history', authorizeAndGetUserAndS
 
     // Set next episode
     const episodes = series.episodes;
-    let nextEpisode = null;
 
-    if (episodes.length !== 0) nextEpisode = episodes[0];
+    let nextEpisode = null;
+    if (episodes.length > 0) nextEpisode = episodes[0];
     
     userSeries.nextEpisode = nextEpisode;
 
     try {
         // Save updated user
-        await user.save();
+        await userSeries.save();
 
         // Send updated series
         res.json(userSeries);
@@ -397,11 +305,10 @@ router.put('/:id/series/:series_id/clear-watch-history', authorizeAndGetUserAndS
     }
 });
 
-/* 2.6 Change watching status of one series added to a user */
+/* 2.6 Change watching status of one series */
 
-router.put('/:id/series/:series_id/change-watching-status/:status', authorizeAndGetUserAndSeries, async (req, res) => {
-    const user = res.user;
-    const series = res.series;
+router.patch('/:id/series/:series_id/change-watching-status/:status', authorizeAndGetUserAndSeries, async (req, res) => {
+    const userSeries = res.series;
 
     let watchingStatus = req.params.status;
 
@@ -421,14 +328,14 @@ router.put('/:id/series/:series_id/change-watching-status/:status', authorizeAnd
     }
 
     // Set series watching status to chosen status
-    series.watchingStatus = watchingStatus;
+    userSeries.watchingStatus = watchingStatus;
 
     try {
         // Save updated user
-        await user.save();
+        await userSeries.save();
 
         // Send updated series
-        res.json(series);
+        res.json(userSeries);
     } catch (err) {
         res.status(400).json({ message: err.message });
     }
