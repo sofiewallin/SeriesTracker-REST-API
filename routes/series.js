@@ -104,13 +104,38 @@ router.get('/:id', getSeries, async (req, res) => {
     if (episodes.length !== 0) {
         for (let i = 0; i < episodes.length; i++) {
             // Get episode season number
-            const episode = episodes[i];
+            let episode = episodes[i];
             const seasonNumber = episode.seasonNumber;
+            const episodeNumber = episode.episodeNumber;
+            let originalAirDate = episode.originalAirDate;
+
+            if (originalAirDate) {
+                const month = originalAirDate.toLocaleString('default', { month: 'short' });
+                const year = originalAirDate.getFullYear();
+                const date = originalAirDate.getDate();
+
+                originalAirDate = `${date} ${month}. ${year}`;
+            }
+
+            let seasonNumberString;
+            if (seasonNumber < 10) seasonNumberString = seasonNumber.toString().padStart(2, '0');
+            let episodeNumberString = episode.episodeNumber;
+            if (episodeNumber < 10) episodeNumberString = episodeNumber.toString().padStart(2, '0');
+
+            const episodeNumbers = `S${seasonNumberString}E${episodeNumberString}`;
+
+            const newEpisodeObj = {
+                episodeId: episode._id,
+                episodeNumbers: episodeNumbers,
+                name: episode.name,
+                originalAirDate: originalAirDate,
+
+            }
             
             // Push a new season object into seasons array
             seasons.push({ 
                 number: seasonNumber,
-                episodes: [episode] 
+                episodes: [newEpisodeObj] 
             });
         }
     }
