@@ -125,7 +125,7 @@ router.get('/:id', getSeries, async (req, res) => {
             const episodeNumbers = `S${seasonNumberString}E${episodeNumberString}`;
 
             const newEpisodeObj = {
-                episodeId: episode._id,
+                episodeId: episode._id.toString(),
                 episodeNumbers: episodeNumbers,
                 name: episode.name,
                 originalAirDate: originalAirDate,
