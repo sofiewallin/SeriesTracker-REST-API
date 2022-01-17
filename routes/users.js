@@ -135,6 +135,7 @@ router.patch('/:id/remove-series/:series_id', authorizeAndGetUserAndSeries, asyn
 /* 2.3 Add episode to "watched episodes" and set next episode for one series */
 
 router.put('/:id/series/:series_id/watch-episode/:episode_id', authorizeAndGetUserAndSeries, async (req, res) => {
+    const user = res.user;
     const userSeries = res.series;
 
     // Check if there is a series in the database with the given id
@@ -190,7 +191,7 @@ router.put('/:id/series/:series_id/watch-episode/:episode_id', authorizeAndGetUs
 
     try {
         // Save updated user
-        await userSeries.save();
+        await user.save();
 
         // Send added episode id
         res.json(userSeries);
@@ -202,6 +203,7 @@ router.put('/:id/series/:series_id/watch-episode/:episode_id', authorizeAndGetUs
 /* 2.4 Remove episode from "watched episodes" and set next episode for one series */
 
 router.put('/:id/series/:series_id/unwatch-episode/:episode_id', authorizeAndGetUserAndSeries, async (req, res) => {
+    const user = res.user;
     const userSeries = res.series;
 
     // Check if there is a series in the database with the given id
@@ -258,7 +260,7 @@ router.put('/:id/series/:series_id/unwatch-episode/:episode_id', authorizeAndGet
 
     try {
         // Save updated user
-        await userSeries.save();
+        await user.save();
 
         // Send removed episode id
         res.json(userSeries);
@@ -269,6 +271,7 @@ router.put('/:id/series/:series_id/unwatch-episode/:episode_id', authorizeAndGet
 
 /* 2.5 Clear watch history and set next episode to first episode of one series */
 router.patch('/:id/series/:series_id/clear-watch-history', authorizeAndGetUserAndSeries, async (req, res) => {
+    const user = res.user;
     const userSeries = res.series;
 
     // Clear watch history
@@ -298,7 +301,7 @@ router.patch('/:id/series/:series_id/clear-watch-history', authorizeAndGetUserAn
 
     try {
         // Save updated user
-        await userSeries.save();
+        await user.save();
 
         // Send updated series
         res.json(userSeries);
@@ -310,6 +313,7 @@ router.patch('/:id/series/:series_id/clear-watch-history', authorizeAndGetUserAn
 /* 2.6 Change watching status of one series */
 
 router.patch('/:id/series/:series_id/change-watching-status/:status', authorizeAndGetUserAndSeries, async (req, res) => {
+    const user = res.user;
     const userSeries = res.series;
 
     let watchingStatus = req.params.status;
@@ -334,7 +338,7 @@ router.patch('/:id/series/:series_id/change-watching-status/:status', authorizeA
 
     try {
         // Save updated user
-        await userSeries.save();
+        await user.save();
 
         // Send updated series
         res.json(userSeries);
