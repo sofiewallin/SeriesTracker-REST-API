@@ -26,7 +26,7 @@ let authorizeAndGetUserAndSeries = [authorizeUser, getUser, getUserSeries];
  * 1. Set read routes
  */
 
-/* 1.1 Get series list */
+/* 1.1 Get all series added to a user */
 
 router.get('/:id/series', authorizeAndGetUser, async (req, res) => {
         const user = res.user;
@@ -38,20 +38,11 @@ router.get('/:id/series', authorizeAndGetUser, async (req, res) => {
 
 });
 
-/* 1.2 Get one series */
-
-router.get('/:id/series/:series_id', authorizeAndGetUserAndSeries, async (req, res) => {
-    const userSeries = res.series;
-
-    // Send series
-    res.send(userSeries);
-});
-
 /**
  * 2. Set update routes
  */
 
-/* 2.1 Add one series to series list */
+/* 2.1 Add one series to a user */
 
 router.patch('/:id/add-series', authorizeAndGetUser, async (req, res) => {
     const user = res.user;
@@ -110,7 +101,7 @@ router.patch('/:id/add-series', authorizeAndGetUser, async (req, res) => {
     }
 });
 
-/* 2.2 Remove one series from series list */
+/* 2.2 Remove one series from a user */
 
 router.patch('/:id/remove-series/:series_id', authorizeAndGetUserAndSeries, async (req, res) => {
     const user = res.user;
@@ -132,7 +123,7 @@ router.patch('/:id/remove-series/:series_id', authorizeAndGetUserAndSeries, asyn
     }
 });
 
-/* 2.3 Add episode to "watched episodes" and set next episode for one series */
+/* 2.3 Add episode to "watched episodes" and set next episode for one series added to a user */
 
 router.patch('/:id/series/:series_id/watch-episode/:episode_id', authorizeAndGetUserAndSeries, async (req, res) => {
     const user = res.user;
@@ -200,7 +191,7 @@ router.patch('/:id/series/:series_id/watch-episode/:episode_id', authorizeAndGet
     }
 });
 
-/* 2.4 Remove episode from "watched episodes" and set next episode for one series */
+/* 2.4 Remove episode from "watched episodes" and set next episode for one series added to a user */
 
 router.patch('/:id/series/:series_id/unwatch-episode/:episode_id', authorizeAndGetUserAndSeries, async (req, res) => {
     const user = res.user;
@@ -269,7 +260,7 @@ router.patch('/:id/series/:series_id/unwatch-episode/:episode_id', authorizeAndG
     }
 });
 
-/* 2.5 Clear watch history and set next episode to first episode of one series */
+/* 2.5 Clear watch history and set next episode to first episode of one series added to a user */
 router.patch('/:id/series/:series_id/clear-watch-history', authorizeAndGetUserAndSeries, async (req, res) => {
     const user = res.user;
     const userSeries = res.series;
@@ -310,7 +301,7 @@ router.patch('/:id/series/:series_id/clear-watch-history', authorizeAndGetUserAn
     }
 });
 
-/* 2.6 Change watching status of one series */
+/* 2.6 Change watching status of one series added to a user */
 
 router.patch('/:id/series/:series_id/change-watching-status/:status', authorizeAndGetUserAndSeries, async (req, res) => {
     const user = res.user;

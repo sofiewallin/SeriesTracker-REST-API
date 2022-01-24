@@ -23,24 +23,23 @@ These are all the endpoints for the different routes:
 - POST / Create one series: `./series`
 - GET / Get all series: `./series`
 - GET / Search all series by name: `./series/search/:query`
-- GET / Get one series (with episodes divided by seasons): `./series/:id`
-- PUT / Update one series: `./series/:id`
-- PUT / Add one episode: `./series/:id/add-episode`
-- PUT / Update one episode: `./series/:id/update-episode/:episode_id`
-- PUT / Remove one episode: `./series/:id/remove-episode/:episode_id`
+- GET / Get one series: `./series/:id`
+- GET / Get one episode: `./series/:id/get-episode/:episode_id`
+- PATCH / Update one series: `./series/:id`
+- PATCH / Add one episode: `./series/:id/add-episode`
+- PATCH / Update one episode: `./series/:id/update-episode/:episode_id`
+- PATCH / Remove one episode: `./series/:id/remove-episode/:episode_id`
 - DELETE / Delete one series: `./series/:id`
 
 **Users** (`routes/users.js`)
 
 - GET / Get all added series to a user: `./users/:id/series`
-- GET / Get added series to a user based on watching status: `./users/:id/series/watching-status/:status`
-- GET / Get one series added to a user: `./users/:id/series/:series_id`
-- GET / Get all next episodes for a user: `./users/:id/next-episode-list`
-- PUT / Add series to a user: `./users/:id/add-series`
-- PUT / Remove series from a user: `./users/:id/remove-series/:series_id`
-- PUT / Add episode to "watched episodes" and set next episode for one series added to a user: `./users/:id/series/:series_id/watch-episode/:episode_id`
-- PUT / Remove episode from "watched episodes" and set next episode for one series added to a user: `./users/:id/series/:series_id/unwatch-episode/:episode_id`
-- PUT / Change watching status of one series added to a user: `./users/:id/series/:series_id/change-watching-status/:status`
+- PATCH / Add series to a user: `./users/:id/add-series`
+- PATCH / Remove series from a user: `./users/:id/remove-series/:series_id`
+- PATCH / Add episode to "watched episodes" and set next episode for one series added to a user: `./users/:id/series/:series_id/watch-episode/:episode_id`
+- PATCH / Remove episode from "watched episodes" and set next episode for one series added to a user: `./users/:id/series/:series_id/unwatch-episode/:episode_id`
+- PATCH / Clear watch history and set next episode to first episode of one series added to a user: `./users/:id/series/:series_id/clear-watch-history`
+- PATCH / Change watching status of one series added to a user: `./users/:id/series/:series_id/change-watching-status/:status`
 
 ### Packages
 

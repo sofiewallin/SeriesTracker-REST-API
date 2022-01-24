@@ -219,7 +219,7 @@ router.get('/:id/get-episode/:episode_id', getSeriesAndEpisode, async (req, res)
 
 /* 3.1 Update one series */
 
-router.put('/:id', getSeries, async (req, res) => {
+router.patch('/:id', getSeries, async (req, res) => {
     const series = res.series;
     const newEpisodes = req.body.episodes;
 
@@ -252,7 +252,7 @@ router.put('/:id', getSeries, async (req, res) => {
 
 /* 3.2 Add one episode */
 
-router.put('/:id/add-episode', getSeries, async (req, res) => {
+router.patch('/:id/add-episode', getSeries, async (req, res) => {
     const series = res.series;
     const episodes = series.episodes;
 
@@ -308,7 +308,7 @@ router.put('/:id/add-episode', getSeries, async (req, res) => {
 
 /* 3.3 Update one episode */
 
-router.put('/:id/update-episode/:episode_id', getSeriesAndEpisode, async (req, res) => {
+router.patch('/:id/update-episode/:episode_id', getSeriesAndEpisode, async (req, res) => {
     const series = res.series;
     const episodes = series.episodes;
     const episode = res.episode;
@@ -346,7 +346,7 @@ router.put('/:id/update-episode/:episode_id', getSeriesAndEpisode, async (req, r
 
 /* 3.4 Remove one episode */
 
-router.put('/:id/remove-episode/:episode_id', getSeriesAndEpisode, async (req, res) => {
+router.patch('/:id/remove-episode/:episode_id', getSeriesAndEpisode, async (req, res) => {
     const series = res.series;
     const episode = res.episode;
 
