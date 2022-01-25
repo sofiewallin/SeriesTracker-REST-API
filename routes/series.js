@@ -111,8 +111,8 @@ router.get('/:id', getSeries, async (req, res) => {
 
             if (originalAirDate) {
                 const month = originalAirDate.toLocaleString('default', { month: 'short' });
-                const year = originalAirDate.getFullYear();
-                const date = originalAirDate.getDate();
+                const year = originalAirDate.getUTCFullYear();
+                const date = originalAirDate.getUTCDate();
 
                 originalAirDate = `${date} ${month}. ${year}`;
             }
