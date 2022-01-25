@@ -110,7 +110,8 @@ router.get('/:id', getSeries, async (req, res) => {
             let originalAirDate = episode.originalAirDate;
 
             if (originalAirDate) {
-                const month = originalAirDate.toLocaleString('default', { month: 'short' });
+                const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                const month = months[originalAirDate.getUTCMonth() + 1];
                 const year = originalAirDate.getUTCFullYear();
                 const date = originalAirDate.getUTCDate();
 
