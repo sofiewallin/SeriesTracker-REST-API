@@ -109,7 +109,7 @@ router.get('/:id', getSeries, async (req, res) => {
             const episodeNumber = episode.episodeNumber;
             let originalAirDate = episode.originalAirDate;
 
-            originalAirDate = originalAirDate.toUTCString().substring(0,10);
+            originalAirDate = originalAirDate.toISOString().substring(0,10);
 
             let seasonNumberString;
             if (seasonNumber < 10) seasonNumberString = seasonNumber.toString().padStart(2, '0');
