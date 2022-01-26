@@ -108,7 +108,6 @@ router.get('/:id', getSeries, async (req, res) => {
             const seasonNumber = episode.seasonNumber;
             const episodeNumber = episode.episodeNumber;
 
-
             let originalAirDate = episode.originalAirDate;
             if (originalAirDate) originalAirDate = originalAirDate.toISOString().substring(0,10);
 
@@ -182,12 +181,7 @@ router.get('/:id/get-episode/:episode_id', getSeriesAndEpisode, async (req, res)
     let episode = res.episode;
 
     let originalAirDate = episode.originalAirDate;
-
-    const month = originalAirDate.toLocaleString('default', { month: 'short' });
-    const year = originalAirDate.getFullYear();
-    const date = originalAirDate.getDate();
-
-    originalAirDate = `${date} ${month}. ${year}`;
+    if (originalAirDate) originalAirDate = originalAirDate.toISOString().substring(0,10);
 
     let seasonNumber = episode.seasonNumber;
     if (seasonNumber < 10) seasonNumber = seasonNumber.toString().padStart(2, '0');
