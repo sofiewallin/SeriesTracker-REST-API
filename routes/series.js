@@ -110,8 +110,7 @@ router.get('/:id', getSeries, async (req, res) => {
             let originalAirDate = episode.originalAirDate;
 
             if (originalAirDate) {
-                const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-                const month = months[originalAirDate.getUTCMonth() + 1];
+                const month = originalAirDate.toLocaleString('default', { month: 'short' });
                 const year = originalAirDate.getUTCFullYear();
                 const date = originalAirDate.getUTCDate();
 
@@ -129,8 +128,7 @@ router.get('/:id', getSeries, async (req, res) => {
                 episodeId: episode._id.toString(),
                 episodeNumbers: episodeNumbers,
                 name: episode.name,
-                originalAirDate: originalAirDate,
-
+                originalAirDate: originalAirDate
             }
             
             // Push a new season object into seasons array
