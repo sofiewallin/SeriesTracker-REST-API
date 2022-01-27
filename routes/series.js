@@ -348,7 +348,7 @@ router.patch('/:id/remove-episode/:episode_id', getSeriesAndEpisode, async (req,
     episodes.pull(episode);
 
     // Reduce episode number by one for episodes after removed episode, in same season
-    if (episodes.length !== 0) {
+    if (episodes.length > 0) {
         for (let i = 0; i < episodes.length; i++) {
             const existingEpisode = episodes[i];
 
@@ -357,6 +357,16 @@ router.patch('/:id/remove-episode/:episode_id', getSeriesAndEpisode, async (req,
                 existingEpisode.episodeNumber -= 1;
             }
         }
+    }
+
+    // Reduce season number by one for episodes with a higher season number if the removed episode is the last in its season
+    const episodesInSameSeason = episodes.filter(exisitingEpisode => exisitingEpisode.seasonNumber === episode.seasonNumber);
+    if (episodesInSameSeason.length === 0) {
+        episodes.forEach(existingEpisode => {
+            if (existingEpisode.seasonNumber > episode.seasonNumber) {
+                existingEpisode.seasonNumber -= 1;
+            }
+        });
     }
 
     try {
