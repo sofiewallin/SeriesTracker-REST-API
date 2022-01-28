@@ -17,6 +17,7 @@ const router = require('express').Router();
 
 // Models
 const Series = require('../models/Series');
+const User = require('../models/User');
 
 // Middleware
 const getSeries = require('../middleware/getSeries');
@@ -389,6 +390,7 @@ router.delete('/:id', getSeries, async (req, res) => {
     try {
         // Remove series
         const deletedSeries = await series.remove();
+        User.updateMany({},{ $pull: { series: { series_id: deletedSeries._id } } });
 
         // Send removed series
         res.json(deletedSeries);
