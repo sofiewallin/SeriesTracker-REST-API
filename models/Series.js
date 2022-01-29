@@ -2,7 +2,8 @@
  * Series model.
  * 
  * 1. Set series schema
- * 2. Export series model
+ * 2. Set middleware to delete all references to series when deleted
+ * 3. Export series model
  * 
  * @author: Sofie Wallin
  */
@@ -12,6 +13,7 @@ const mongoose = require('mongoose');
 
 // Models
 const Episode = require('./Episode');
+const User = require('./User');
 
 /**
  * 1. Set series schema
@@ -42,7 +44,21 @@ const seriesSchema = new mongoose.Schema(
 );
 
 /**
- * 2. Export series model
+ * 2. Set middleware to delete all references to series when deleted
+ */
+
+seriesSchema.pre('remove', async function(next) {
+    try {
+        await User.updateMany({}, { $pull: { series: { series_id: this._id } } });
+        next();
+    }
+    catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
+
+/**
+ * 3. Export series model
  */
 
 module.exports = mongoose.model('Series', seriesSchema);

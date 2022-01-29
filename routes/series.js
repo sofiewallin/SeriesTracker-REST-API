@@ -15,6 +15,8 @@
 // Express router
 const router = require('express').Router();
 
+const mongoose = require('mongoose');
+
 // Models
 const Series = require('../models/Series');
 const User = require('../models/User');
@@ -390,7 +392,9 @@ router.delete('/:id', getSeries, async (req, res) => {
     try {
         // Remove series
         const deletedSeries = await series.remove();
-        User.updateMany({},{ $pull: { series: { series_id: deletedSeries._id } } });
+        //console.log(deletedSeries._id);
+        //console.log(User.find({ series: { series_id: deletedSeries._id } }));
+        //User.updateMany({}, { $pull: { series: { series_id: deletedSeries._id } } });
 
         // Send removed series
         res.json(deletedSeries);

@@ -12,7 +12,6 @@
 const router = require('express').Router();
 
 // Models
-const User = require('../models/User');
 const Series = require('../models/Series');
 
 // Middleware

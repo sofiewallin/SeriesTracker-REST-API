@@ -11,10 +11,6 @@
 // Mongoose
 const mongoose = require('mongoose');
 
-// Models
-const Series = require('./Series');
-const Episode = require('./Episode');
-
 /**
  * 1. Set user series schema
  */
@@ -23,7 +19,7 @@ const userSeriesSchema = new mongoose.Schema(
     {
         series_id: {
             type: mongoose.Schema.Types.ObjectId, 
-            ref: Series,
+            ref: 'Series',
             required: [true, 'A series id is required.'],
         },
         watchingStatus: {
@@ -37,7 +33,7 @@ const userSeriesSchema = new mongoose.Schema(
         watchedEpisodes: [{ type: String }],
         nextEpisode: {
             type: mongoose.Schema.Types.ObjectId, 
-            ref: Episode
+            ref: 'Episode'
         }
     },
     { timestamps: { createdAt: 'addedAt' } }
