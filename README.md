@@ -1,6 +1,6 @@
 # Series Tracker REST API
 
-This is a REST API for an application called Series Tracker. I have developed the API and the application as part of a school project. The purpose of the project is to learn how to create a REST API using Node.js, Express and MongoDB and then consume the API in a web application using a JavaScript framework.
+This is a REST API for an application called Series Tracker. I have developed the API, a small [application for administrating the series](https://github.com/sofiewallin/SeriesTracker-admin) and the [main application](https://github.com/sofiewallin/SeriesTracker-web-app) as part of a school project. The purpose of the project was to learn how to create a REST API using Node.js, Express and MongoDB and then consume the API in a web application using a JavaScript framework.
 
 Series Tracker allows a user to track all the series they are watching, that they want to watch or that they have already watched. When the user adds series they can choose to add it as "Watching now", "Watch next" or "Have watched" and the user can also mark which episodes they have watched and get an overview of which episodes to watch next. At this point there is no registering function for the application and it runs on only one user.
 
@@ -40,17 +40,6 @@ These are all the endpoints for the different routes:
 - PATCH / Unwatch one episode of series added to a user: `./users/:id/series/:series_id/unwatch-episode/:episode_id`
 - PATCH / Clear watch history of one series added to a user: `./users/:id/series/:series_id/clear-watch-history`
 - PATCH / Change watching status of one series added to a user: `./users/:id/series/:series_id/change-watching-status/:status`
-
-### Packages
-
-The following packages has been added as dependencies (besides Express):
-
-- [`bcryptjs`](https://www.npmjs.com/package/bcryptjs) - For hashing passwords and reading hashed passwords. It is used in the login function.
-- [`cors`](https://www.npmjs.com/package/cors) - For enabling CORS for the API.
-- [`dotenv`](https://www.npmjs.com/package/dotenv) - For loading environment variables from a `.env` file.
-- [`jsonwebtoken`](https://www.npmjs.com/package/jsonwebtoken) - For creating a JWT for the user on login and for authenticating and authorizing the user on protected routes.
-- [`mongoose`](https://www.npmjs.com/package/mongoose) - For connecting to a MongoDB database and for creating schemas and models for the different collections in the database. All the schemas and models can be found in `models/`
-- [`nodemon`](https://www.npmjs.com/package/nodemon) (DevDependency) - For listening to changes when server is running in development.
 
 ## Using this repository and the REST API
 
