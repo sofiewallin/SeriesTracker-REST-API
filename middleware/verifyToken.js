@@ -1,5 +1,7 @@
 /**
- * Authenticate user middleware.
+ * Verify token middleware.
+ * 
+ * Verifies token and authenticates user.
  * 
  * @author: Sofie Wallin
  */

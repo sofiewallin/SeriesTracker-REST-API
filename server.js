@@ -2,9 +2,8 @@
  * Server.
  * 
  * 1. Connect to database
- * 2. Set API headers
- * 3. Set API routes
- * 4. Listen to port and start server
+ * 2. Set API routes
+ * 3. Listen to port and start server
  * 
  * @author: Sofie Wallin
  */
@@ -35,7 +34,7 @@ db.on('error', (error) => console.error(error));
 db.once('open', () => console.log('Connected to database'));
 
 /**
- * 3. Set API routes
+ * 2. Set API routes
  */
 
 // Middleware to authenticate user for route
@@ -55,7 +54,7 @@ app.use('/users/', verifyToken, usersRouter);
 
 
 /**
- * 4. Listen to port and start server
+ * 3. Listen to port and start server
  */
 
 const port = process.env.PORT || 3000; 

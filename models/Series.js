@@ -49,6 +49,7 @@ const seriesSchema = new mongoose.Schema(
 
 seriesSchema.pre('remove', async function(next) {
     try {
+        // Remove series on all users that has the _id of deleted series as series_id
         await User.updateMany({}, { $pull: { series: { series_id: this._id } } });
         next();
     }

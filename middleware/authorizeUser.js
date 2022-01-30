@@ -1,6 +1,9 @@
 /**
  * Authorize user middleware.
  * 
+ * Makes sure user is only authorized to access
+ * its own information.
+ * 
  * @author: Sofie Wallin
  */
 

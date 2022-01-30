@@ -385,16 +385,14 @@ router.patch('/:id/remove-episode/:episode_id', getSeriesAndEpisode, async (req,
 
 /* 4. Set delete routes */
 
-// Delete one series
+/* 4.1 Delete one series */
+
 router.delete('/:id', getSeries, async (req, res) => {
     const series = res.series;
 
     try {
         // Remove series
         const deletedSeries = await series.remove();
-        //console.log(deletedSeries._id);
-        //console.log(User.find({ series: { series_id: deletedSeries._id } }));
-        //User.updateMany({}, { $pull: { series: { series_id: deletedSeries._id } } });
 
         // Send removed series
         res.json(deletedSeries);

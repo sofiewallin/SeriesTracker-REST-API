@@ -1,5 +1,7 @@
 /**
- * Get series added to a user middleware - Gets a series from database by id.
+ * Get series added to a user middleware
+ * 
+ * Gets a series from database by id.
  * 
  * @author: Sofie Wallin
  */

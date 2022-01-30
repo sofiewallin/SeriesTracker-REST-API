@@ -34,19 +34,20 @@ These are all the endpoints for the different routes:
 **Users** (`routes/users.js`)
 
 - GET / Get all added series to a user: `./users/:id/series`
-- PATCH / Add series to a user: `./users/:id/add-series`
-- PATCH / Remove series from a user: `./users/:id/remove-series/:series_id`
-- PATCH / Add episode to "watched episodes" and set next episode for one series added to a user: `./users/:id/series/:series_id/watch-episode/:episode_id`
-- PATCH / Remove episode from "watched episodes" and set next episode for one series added to a user: `./users/:id/series/:series_id/unwatch-episode/:episode_id`
-- PATCH / Clear watch history and set next episode to first episode of one series added to a user: `./users/:id/series/:series_id/clear-watch-history`
+- PATCH / Add one series to a user: `./users/:id/add-series`
+- PATCH / Remove one series from a user: `./users/:id/remove-series/:series_id`
+- PATCH / Watch one episode of series added to a user: `./users/:id/series/:series_id/watch-episode/:episode_id`
+- PATCH / Unwatch one episode of series added to a user: `./users/:id/series/:series_id/unwatch-episode/:episode_id`
+- PATCH / Clear watch history of one series added to a user: `./users/:id/series/:series_id/clear-watch-history`
 - PATCH / Change watching status of one series added to a user: `./users/:id/series/:series_id/change-watching-status/:status`
 
 ### Packages
 
-The following packages has been added as dependencies:
+The following packages has been added as dependencies (besides Express):
 
-- [`dotenv`](https://www.npmjs.com/package/dotenv) - For loading environment variables from a `.env` file.
 - [`bcryptjs`](https://www.npmjs.com/package/bcryptjs) - For hashing passwords and reading hashed passwords. It is used in the login function.
+- [`cors`](https://www.npmjs.com/package/cors) - For enabling CORS for the API.
+- [`dotenv`](https://www.npmjs.com/package/dotenv) - For loading environment variables from a `.env` file.
 - [`jsonwebtoken`](https://www.npmjs.com/package/jsonwebtoken) - For creating a JWT for the user on login and for authenticating and authorizing the user on protected routes.
 - [`mongoose`](https://www.npmjs.com/package/mongoose) - For connecting to a MongoDB database and for creating schemas and models for the different collections in the database. All the schemas and models can be found in `models/`
 - [`nodemon`](https://www.npmjs.com/package/nodemon) (DevDependency) - For listening to changes when server is running in development.
@@ -58,7 +59,7 @@ This is what you need to know if you want to clone this repository and run this 
 - To get `node_modules/` you need to run the command `npm install`.
 - The API has two scripts in `package.json`, one for production and one for development. Run `npm start` for production and `npm run devStart` for development. The later uses `nodemon`. The entrypoint for the API is `server.js`.
 - To connect the API to a MongoDB-database and set a secret for the JWT you need a `.env` file. Modify `.env.example` with your information and rename it to `.env`.
-- At the end of `server.js` you can specify your port and then use the API at: http://localhost:your-port/. It is set to 3000 now.
+- At the end of `server.js` you can specify your port and then use the API at: http://localhost:your-port/. It is currently set to 3000.
 - Right now, for the purposes of this school assignment, I don't have a registering function in my code because I didn't have time to validate that function properly. You would have to build such a function with `bcryptjs` if you want to register a user that can login. Also, if you register a user and login with that user, in `routes/authentication.js` the JWT is set with an expiration for two hours. I have not created separate access- and refresh tokens at this time. When you login, you get the token. Add that with a **Authorization** header that has the value of "Bearer /your-token/".
 
 
